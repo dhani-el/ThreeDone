@@ -1,24 +1,74 @@
-import { useEffect,useRef } from "react";
-import { useLoader,useFrame } from "@react-three/fiber";
+import { useEffect,useRef, useState } from "react";
+import { useLoader,useFrame,useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import  "./app.css";
 import { RigidBody } from "@react-three/rapier";
+import gsap from "gsap";
 
 export default function Exploration({cameraPositions}){
   const building = useLoader(GLTFLoader,"./coffee_stand.glb");
   const movingMeshRef = useRef();
-  // useFrame((state, delta) =>
-  // {
+  const {camera} = useThree();
+  const [scrollStep,setScrollStep] = useState(0);
+  const averageTimeForOneAnimationToComplete = 1000;
+  const maxSteps = 3;
 
-  //     state.camera.position.x = cameraPositions.x;
-  //     state.camera.position.z = cameraPositions.z;
-  //     state.camera.position.y = cameraPositions.y;
-  
-  //     // ...
-  // })
-  useEffect(function(){
-    console.log("image has loaded");
-  },[])
+  // use effect for testing with leva
+  useEffect(()=>{
+    camera.position.x = cameraPositions.x;
+    camera.position.y = cameraPositions.y;
+    camera.position.z = cameraPositions.z;
+  },[camera,cameraPositions]);
+
+  // use effect with the scroll listener
+  useEffect(()=>{
+    let isScrolling = false;
+
+    function handleScroll(e){
+
+      if (isScrolling) {
+        return
+      }
+
+      isScrolling = true;
+      if (e.deltaY > 0) {
+        setScrollStep((init)=> Math.min(init + 1,maxSteps));
+        console.log("scrolled down");
+      }else{
+        setScrollStep((init)=> Math.max(0,init - 1));
+        console.log("scrolled up");
+
+      }
+
+      setTimeout(() => {
+        isScrolling = false;
+      }, averageTimeForOneAnimationToComplete);
+
+    }
+
+    window.addEventListener("wheel",handleScroll);
+
+    return ()=>window.removeEventListener("wheel",handleScroll);
+
+  },[]);
+
+  // useEffect(()=>{
+
+  // },[])
+
+  useEffect(()=>{
+    switch(scrollStep){
+      case 0:gsap.to(camera.position,{ x: 4.6, y: 0.7, z: -0.1, duration: 1 });
+      break;
+      case 1:gsap.to(camera.position,{ x: 2.6, y: 0.7, z: -0.1, duration: 1 });
+      break;
+      case 2:gsap.to(camera.position,{ x: 1.6, y: 0.5, z: -0.1, duration: 1 });
+      break;
+      case 3:gsap.to(camera.position,{ x: 0.6, y: 0.7, z: -0.1, duration: 1 });
+      break;
+    }
+    console.log(scrollStep);
+  },[scrollStep])
 
   return  <>
             {/* <mesh>
