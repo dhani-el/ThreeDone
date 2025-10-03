@@ -41,8 +41,9 @@ export default function Exploration({cameraPositions,cameraRotation}){
       }else{
         setScrollStep((init)=> Math.max(0,init - 1));
         console.log("scrolled up");
-
       }
+
+      if(scrollStep < maxSteps || scrollStep > 0)
 
       setTimeout(() => {
         isScrolling = false;
@@ -56,9 +57,10 @@ export default function Exploration({cameraPositions,cameraRotation}){
 
   },[]);
 
-  // useEffect(()=>{
-
-  // },[])
+  useEffect(()=>{
+    // use Effect to look into a model
+    console.log(building);
+  },[])
 
   useEffect(()=>{
     switch(scrollStep){
@@ -79,7 +81,8 @@ export default function Exploration({cameraPositions,cameraRotation}){
               <torusKnotGeometry/>
               <meshNormalMaterial/>
             </mesh> */}
-            <RigidBody ref = {movingMeshRef} >
+            {/* <RigidBody ref = {movingMeshRef} colliders= "trimesh" > */}
+            <RigidBody ref = {movingMeshRef}  >
               <primitive position-y={-1} object={building.scene} />  
             </RigidBody>
             <ambientLight intensity={2}/>
