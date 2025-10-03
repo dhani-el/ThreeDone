@@ -5,7 +5,7 @@ import  "./app.css";
 import { RigidBody } from "@react-three/rapier";
 import gsap from "gsap";
 
-export default function Exploration({cameraPositions}){
+export default function Exploration({cameraPositions,cameraRotation}){
   const building = useLoader(GLTFLoader,"./coffee_stand.glb");
   const movingMeshRef = useRef();
   const {camera} = useThree();
@@ -18,7 +18,11 @@ export default function Exploration({cameraPositions}){
     camera.position.x = cameraPositions.x;
     camera.position.y = cameraPositions.y;
     camera.position.z = cameraPositions.z;
-  },[camera,cameraPositions]);
+    // console.log(camera.rotation);
+    camera.rotation.x = cameraRotation.x;
+    camera.rotation.y = cameraRotation.y;
+    camera.rotation.z = cameraRotation.z;
+  },[camera,cameraPositions,cameraRotation]);
 
   // use effect with the scroll listener
   useEffect(()=>{
@@ -75,9 +79,9 @@ export default function Exploration({cameraPositions}){
               <torusKnotGeometry/>
               <meshNormalMaterial/>
             </mesh> */}
-            {/* <RigidBody ref = {movingMeshRef} > */}
+            <RigidBody ref = {movingMeshRef} >
               <primitive position-y={-1} object={building.scene} />  
-            {/* </RigidBody> */}
+            </RigidBody>
             <ambientLight intensity={2}/>
           </>
 }
