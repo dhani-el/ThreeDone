@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls,Environment } from "@react-three/drei";
 import { Suspense, useState } from "react";
 import { Physics } from "@react-three/rapier";
 import { useControls } from "leva";
 import Exploration from "./buildingExploration"
 import PhysicsGround from "./ground";
-
+import Hamburger from "./hamburger";
 
 function App() {
   // {"position":{"x":4.6,"y":0.7,"z":-0.1}}
@@ -30,12 +30,15 @@ function App() {
     <div id="app" >
       <p>This is my react three fiber playground</p>
       <Canvas camera={{position:[position.x,position.y,position.z]}} >
-        {/* <OrbitControls/> */}
+        <OrbitControls/>
+        <Environment preset="park" />
+        <ambientLight intensity={8}/>
         <Suspense fallback={<Html>Model is loading...</Html>}>
-          <Physics debug>
-            <Exploration cameraPositions={position} cameraRotation={rotation} />
+          {/* <Physics debug> */}
+            {/* <Exploration cameraPositions={position} cameraRotation={rotation} /> */}
+            <Hamburger/>
             <PhysicsGround/>
-          </Physics>
+          {/* </Physics> */}
         </Suspense>
       </Canvas>
     </div>

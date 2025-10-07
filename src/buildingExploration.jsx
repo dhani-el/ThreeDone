@@ -1,12 +1,14 @@
 import { useEffect,useRef, useState } from "react";
 import { useLoader,useFrame,useThree } from "@react-three/fiber";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import  "./app.css";
 import { RigidBody } from "@react-three/rapier";
 import gsap from "gsap";
+import { useGLTF } from "@react-three/drei";
 
 export default function Exploration({cameraPositions,cameraRotation}){
-  const building = useLoader(GLTFLoader,"./coffee_stand.glb");
+  const { nodes, materials,scene }  = useGLTF("./coffee_stand.glb");
+  // const building = useLoader(GLTFLoader,"./coffee_stand.glb");
   const movingMeshRef = useRef();
   const {camera} = useThree();
   const [scrollStep,setScrollStep] = useState(0);
@@ -59,7 +61,8 @@ export default function Exploration({cameraPositions,cameraRotation}){
 
   useEffect(()=>{
     // use Effect to look into a model
-    console.log(building);
+    console.log(nodes);
+    console.log(materials);
   },[])
 
   useEffect(()=>{
@@ -77,14 +80,9 @@ export default function Exploration({cameraPositions,cameraRotation}){
   },[scrollStep])
 
   return  <>
-            {/* <mesh>
-              <torusKnotGeometry/>
-              <meshNormalMaterial/>
-            </mesh> */}
             {/* <RigidBody ref = {movingMeshRef} colliders= "trimesh" > */}
             <RigidBody ref = {movingMeshRef}  >
-              <primitive position-y={-1} object={building.scene} />  
+              <primitive position-y={-1} object={scene}  />  
             </RigidBody>
-            <ambientLight intensity={2}/>
           </>
 }
