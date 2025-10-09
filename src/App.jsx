@@ -8,14 +8,15 @@ import { useControls } from "leva";
 import Exploration from "./buildingExploration"
 import PhysicsGround from "./ground";
 import Hamburger from "./hamburger";
+import PracticeObject from "./practicePhysicsObject";
 
 function App() {
   // {"position":{"x":4.6,"y":0.7,"z":-0.1}}
-  const [cameraPosition,setCameraPosition] = useState({x:4.6,y:0.7,z:-0.1});
+  const [cameraPosition,setCameraPosition] = useState({x:4.6,y:2.7,z:0.1});
   const [test,settest] = useState(1);
   const {position} = useControls({
     position:{
-    value:{x:4.6,y:0.7,z:-0.1},
+    value:{x:5.6,y:2.7,z:1.5},
     step:0.1
   }});
   const {rotation} = useControls({
@@ -30,15 +31,16 @@ function App() {
     <div id="app" >
       <p>This is my react three fiber playground</p>
       <Canvas camera={{position:[position.x,position.y,position.z]}} >
-        <OrbitControls/>
-        <Environment preset="park" />
+        {/* <OrbitControls/> */}
+        <Environment files={"./modern_evening_street_1k.hdr"} />
         <ambientLight intensity={8}/>
         <Suspense fallback={<Html>Model is loading...</Html>}>
-          {/* <Physics debug> */}
+          <Physics >
+            <PracticeObject/>
             {/* <Exploration cameraPositions={position} cameraRotation={rotation} /> */}
-            <Hamburger/>
+            {/* <Hamburger/> */}
             <PhysicsGround/>
-          {/* </Physics> */}
+          </Physics>
         </Suspense>
       </Canvas>
     </div>

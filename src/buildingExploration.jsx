@@ -59,11 +59,11 @@ export default function Exploration({cameraPositions,cameraRotation}){
 
   },[]);
 
-  useEffect(()=>{
-    // use Effect to look into a model
-    console.log(nodes);
-    console.log(materials);
-  },[])
+  // useEffect(()=>{
+  //   // use Effect to look into a model
+  //   console.log(nodes);
+  //   console.log(materials);
+  // },[])
 
   useEffect(()=>{
     switch(scrollStep){
