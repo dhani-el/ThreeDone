@@ -16,7 +16,7 @@ function App() {
   const [test,settest] = useState(1);
   const {position} = useControls({
     position:{
-    value:{x:5.6,y:2.7,z:1.5},
+    value:{x:5.6,y:3.7,z:1.5},
     step:0.1
   }});
   const {rotation} = useControls({
@@ -31,13 +31,13 @@ function App() {
     <div id="app" >
       <p>This is my react three fiber playground</p>
       <Canvas camera={{position:[position.x,position.y,position.z]}} >
-        {/* <OrbitControls/> */}
+        <OrbitControls enableZoom = {false}  />
         <Environment files={"./modern_evening_street_1k.hdr"} />
         <ambientLight intensity={8}/>
         <Suspense fallback={<Html>Model is loading...</Html>}>
           <Physics >
             <PracticeObject/>
-            {/* <Exploration cameraPositions={position} cameraRotation={rotation} /> */}
+            <Exploration cameraPositions={position} cameraRotation={rotation} />
             {/* <Hamburger/> */}
             <PhysicsGround/>
           </Physics>

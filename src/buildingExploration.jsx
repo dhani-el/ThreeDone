@@ -16,48 +16,48 @@ export default function Exploration({cameraPositions,cameraRotation}){
   const maxSteps = 3;
 
   // use effect for testing with leva
-  useEffect(()=>{
-    camera.position.x = cameraPositions.x;
-    camera.position.y = cameraPositions.y;
-    camera.position.z = cameraPositions.z;
-    // console.log(camera.rotation);
-    camera.rotation.x = cameraRotation.x;
-    camera.rotation.y = cameraRotation.y;
-    camera.rotation.z = cameraRotation.z;
-  },[camera,cameraPositions,cameraRotation]);
+  // useEffect(()=>{
+  //   camera.position.x = cameraPositions.x;
+  //   camera.position.y = cameraPositions.y;
+  //   camera.position.z = cameraPositions.z;
+  //   // console.log(camera.rotation);
+  //   camera.rotation.x = cameraRotation.x;
+  //   camera.rotation.y = cameraRotation.y;
+  //   camera.rotation.z = cameraRotation.z;
+  // },[camera,cameraPositions,cameraRotation]);
 
   // use effect with the scroll listener
-  useEffect(()=>{
-    let isScrolling = false;
+  // useEffect(()=>{
+  //   let isScrolling = false;
 
-    function handleScroll(e){
+  //   function handleScroll(e){
 
-      if (isScrolling) {
-        return
-      }
+  //     if (isScrolling) {
+  //       return
+  //     }
 
-      isScrolling = true;
-      if (e.deltaY > 0) {
-        setScrollStep((init)=> Math.min(init + 1,maxSteps));
-        console.log("scrolled down");
-      }else{
-        setScrollStep((init)=> Math.max(0,init - 1));
-        console.log("scrolled up");
-      }
+  //     isScrolling = true;
+  //     if (e.deltaY > 0) {
+  //       setScrollStep((init)=> Math.min(init + 1,maxSteps));
+  //       console.log("scrolled down");
+  //     }else{
+  //       setScrollStep((init)=> Math.max(0,init - 1));
+  //       console.log("scrolled up");
+  //     }
 
-      if(scrollStep < maxSteps || scrollStep > 0)
+  //     if(scrollStep < maxSteps || scrollStep > 0)
 
-      setTimeout(() => {
-        isScrolling = false;
-      }, averageTimeForOneAnimationToComplete);
+  //     setTimeout(() => {
+  //       isScrolling = false;
+  //     }, averageTimeForOneAnimationToComplete);
 
-    }
+  //   }
 
-    window.addEventListener("wheel",handleScroll);
+  //   window.addEventListener("wheel",handleScroll);
 
-    return ()=>window.removeEventListener("wheel",handleScroll);
+  //   return ()=>window.removeEventListener("wheel",handleScroll);
 
-  },[]);
+  // },[]);
 
   // useEffect(()=>{
   //   // use Effect to look into a model

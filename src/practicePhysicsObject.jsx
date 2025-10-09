@@ -26,14 +26,14 @@ export default function PracticeObject(){
   
       if (e.deltaY > 0) {
         if (boxRef.current) {
-          boxRef.current.applyImpulse({ x: -10, y: 0, z: 0 }, true);
+          boxRef.current.applyImpulse({ x: -0.2, y: 0, z: 0 }, true);
           // boxRef.current.
           setCameraPosition(()=>vec3(boxRef.current.translation()));
           console.log(vec3(boxRef.current.translation()));
           console.log("moving forward");
         }
       }else{
-        boxRef.current.applyImpulse({ x: 10, y: 0, z: 0 }, true);
+        boxRef.current.applyImpulse({ x: 0.2, y: 0, z: 0 }, true);
         setCameraPosition(()=>vec3(boxRef.current.translation()));
         console.log(vec3(boxRef.current.translation()));
         console.log("moving back");
@@ -60,9 +60,9 @@ export default function PracticeObject(){
   },[cameraPosition])
 
   return (
-            <RigidBody ref={boxRef} position={[0,0,0]} >
+            <RigidBody ref={boxRef} position={[4,0,0]} >
               <mesh >
-                <boxGeometry args={[2,2,2]} />
+                <boxGeometry args={[0.5,0.5,0.5]} />
                 <meshBasicMaterial color={"purple"} />
               </mesh>
             </RigidBody>
