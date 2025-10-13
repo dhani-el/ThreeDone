@@ -1,5 +1,6 @@
 // RenderMeshes.js
 import { Html,Text,Billboard } from '@react-three/drei'
+import { RigidBody } from '@react-three/rapier'
 import { useMemo } from 'react'
 import * as THREE from 'three'
 
@@ -26,6 +27,7 @@ export default function RenderMeshes({ gltf, clone = true }) {
   return (
     <>
       {meshes.map((mesh, i) => {
+        console.log(mesh.name,mesh);
         const labelOffset = [0.2,0.2,0.2]
         const box = new THREE.Box3().setFromObject(mesh);
         const center = new THREE.Vector3();
@@ -49,6 +51,46 @@ export default function RenderMeshes({ gltf, clone = true }) {
             <div style={{ color: 'white', fontSize: '14px' }}>{mesh.name || `Mesh_${i}`}</div>
           </Html> */}
         </group>
+        }
+      )
+      }
+    </>
+  )
+}
+
+
+export function RenderMeshesRigidAvatar({ gltf, clone = true ,ref}) {
+  // Memoize to avoid re-rendering unnecessarily
+  const meshes = useMemo(() => {
+    const all = []
+    gltf.scene.updateMatrixWorld(true) // make sure all matrices are up to date
+
+    gltf.scene.traverse(obj => {
+      if (obj.isMesh) {
+        const mesh = clone ? obj.clone() : obj
+        mesh.applyMatrix4(obj.matrixWorld);
+        mesh.matrixAutoUpdate = false;
+        mesh.geometry = mesh.geometry.clone()
+        mesh.material = mesh.material.clone()
+        all.push(mesh)
+      }
+    })
+    return all
+  }, [gltf, clone])
+
+  return (
+    <>
+      {meshes.map((mesh,i) => {
+        if (mesh.name === "avatar") {
+          return <RigidBody ref={ref}  >
+                    <primitive  key={i} object={mesh}  />
+                </RigidBody>
+        }
+        else{
+              return  <group>
+                          <primitive key={i} object={mesh}  />
+                        </group>
+                }
         }
       )
       }

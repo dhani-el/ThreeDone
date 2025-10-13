@@ -7,13 +7,15 @@ import gsap from "gsap";
 import { useGLTF } from "@react-three/drei";
 
 export default function Exploration({cameraPositions,cameraRotation}){
-  const { nodes, materials,scene }  = useGLTF("./coffee_stand.glb");
+  const { nodes, materials,scene }  = useGLTF("./coffe_shop_with_an_avatar.glb");
   // const building = useLoader(GLTFLoader,"./coffee_stand.glb");
   const movingMeshRef = useRef();
   const {camera} = useThree();
   const [scrollStep,setScrollStep] = useState(0);
+  const [cameraPosition, setCameraPosition] = useState(null)
   const averageTimeForOneAnimationToComplete = 1000;
   const maxSteps = 3;
+  const avatarRef = useRef(nodes?.avatar);
 
   // use effect for testing with leva
   // useEffect(()=>{
@@ -61,23 +63,74 @@ export default function Exploration({cameraPositions,cameraRotation}){
 
   // useEffect(()=>{
   //   // use Effect to look into a model
-  //   console.log(nodes);
+  //   console.log(nodes.avatar);
   //   console.log(materials);
   // },[])
 
+  // useEffect(()=>{
+  //   switch(scrollStep){
+  //     case 0:gsap.to(camera.position,{ x: 4.6, y: 0.7, z: -0.1, duration: 1 });
+  //     break;
+  //     case 1:gsap.to(camera.position,{ x: 2.6, y: 0.7, z: -0.1, duration: 1 });
+  //     break;
+  //     case 2:gsap.to(camera.position,{ x: 1.6, y: 0.5, z: -0.1, duration: 1 });
+  //     break;
+  //     case 3:gsap.to(camera.position,{ x: 0.6, y: 0.7, z: -0.1, duration: 1 });
+  //     break;
+  //   }
+  //   console.log(scrollStep);
+  // },[scrollStep])
+
   useEffect(()=>{
-    switch(scrollStep){
-      case 0:gsap.to(camera.position,{ x: 4.6, y: 0.7, z: -0.1, duration: 1 });
-      break;
-      case 1:gsap.to(camera.position,{ x: 2.6, y: 0.7, z: -0.1, duration: 1 });
-      break;
-      case 2:gsap.to(camera.position,{ x: 1.6, y: 0.5, z: -0.1, duration: 1 });
-      break;
-      case 3:gsap.to(camera.position,{ x: 0.6, y: 0.7, z: -0.1, duration: 1 });
-      break;
+    let objectIsMoving = false;
+    console.log(avatarRef.current);
+
+    function handleScroll(e){
+      if(true){
+
+        if (objectIsMoving) {
+          return ;
+        }
+    
+        objectIsMoving = true;
+    
+        if (e.deltaY > 0) {
+          if (avatarRef.current) {
+            avatarRef.current.applyImpulse({ x: -0.2, y: 0, z: 0 }, true);
+            // avatarRef.current.
+            setCameraPosition(()=>vec3(avatarRef.current.translation()));
+            console.log(vec3(avatarRef.current.translation()));
+            console.log("moving forward");
+          }
+        }else{
+          avatarRef.current.applyImpulse({ x: 0.2, y: 0, z: 0 }, true);
+          setCameraPosition(()=>vec3(avatarRef.current.translation()));
+          console.log(vec3(avatarRef.current.translation()));
+          console.log("moving back");
+    
+        }
+    
+        setTimeout(() => {
+          objectIsMoving = false;
+        }, 250);
+
+      }
+  
     }
-    console.log(scrollStep);
-  },[scrollStep])
+
+    window.addEventListener("wheel",handleScroll);
+
+    return ()=> {window.removeEventListener("wheel",handleScroll);}
+  },[])
+
+  useEffect(()=>{
+    if (cameraPosition) {
+      camera.position.x = cameraPosition.x;
+      // camera.position.y = cameraPosition.y;
+      camera.position.z = cameraPosition.z;
+    }
+  },[cameraPosition])
+
 
   return  <>
             {/* <RigidBody ref = {movingMeshRef} colliders= "trimesh" > */}

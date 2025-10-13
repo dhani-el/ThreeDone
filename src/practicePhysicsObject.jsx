@@ -2,9 +2,9 @@ import { RigidBody, vec3 } from "@react-three/rapier";
 import { useEffect, useState, useRef } from "react";
 import { useThree } from "@react-three/fiber";
 
-export default function PracticeObject(){
+export default function PracticeObject({position = [4,0,0],move,isRigidBody=true}){
   const direction = {forward:"forward",backward:"backward",left:"left",right:"right"};
-  const [move,setMove] = useState({shouldMove:false,direction:direction.forward});
+  // const [move,setMove] = useState({shouldMove:false,direction:direction.forward});
   const boxRef = useRef(null);
   const {camera} = useThree();
   const [cameraPosition, setCameraPosition] = useState(null)
@@ -17,32 +17,35 @@ export default function PracticeObject(){
     // console.log(boxRef.current);
 
     function handleScroll(e){
+      if(move){
 
-      if (objectIsMoving) {
-        return ;
-      }
-  
-      objectIsMoving = true;
-  
-      if (e.deltaY > 0) {
-        if (boxRef.current) {
-          boxRef.current.applyImpulse({ x: -0.2, y: 0, z: 0 }, true);
-          // boxRef.current.
+        if (objectIsMoving) {
+          return ;
+        }
+    
+        objectIsMoving = true;
+    
+        if (e.deltaY > 0) {
+          if (boxRef.current) {
+            boxRef.current.applyImpulse({ x: -0.2, y: 0, z: 0 }, true);
+            // boxRef.current.
+            setCameraPosition(()=>vec3(boxRef.current.translation()));
+            console.log(vec3(boxRef.current.translation()));
+            console.log("moving forward");
+          }
+        }else{
+          boxRef.current.applyImpulse({ x: 0.2, y: 0, z: 0 }, true);
           setCameraPosition(()=>vec3(boxRef.current.translation()));
           console.log(vec3(boxRef.current.translation()));
-          console.log("moving forward");
+          console.log("moving back");
+    
         }
-      }else{
-        boxRef.current.applyImpulse({ x: 0.2, y: 0, z: 0 }, true);
-        setCameraPosition(()=>vec3(boxRef.current.translation()));
-        console.log(vec3(boxRef.current.translation()));
-        console.log("moving back");
-  
+    
+        setTimeout(() => {
+          objectIsMoving = false;
+        }, 250);
+
       }
-  
-      setTimeout(() => {
-        objectIsMoving = false;
-      }, 250);
   
     }
 
@@ -60,11 +63,17 @@ export default function PracticeObject(){
   },[cameraPosition])
 
   return (
-            <RigidBody ref={boxRef} position={[4,0,0]} >
-              <mesh >
-                <boxGeometry args={[0.5,0.5,0.5]} />
-                <meshBasicMaterial color={"purple"} />
-              </mesh>
-            </RigidBody>
-  )
+            <>
+             {isRigidBody && <RigidBody ref={boxRef} position={position} >
+                              <mesh >
+                                <boxGeometry args={[0.5,0.5,0.5]} />
+                                <meshBasicMaterial color={"purple"} />
+                              </mesh>
+                            </RigidBody>}
+            {!isRigidBody && <mesh >
+                                <boxGeometry args={[0.5,0.5,0.5]} />
+                                <meshBasicMaterial color={"purple"} />
+                              </mesh>}
+            </>
+                  )
 }
