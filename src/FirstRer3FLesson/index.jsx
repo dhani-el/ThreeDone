@@ -6,7 +6,7 @@ export default function FirstLesson(){
 
     useFrame((state,delta)=>{
         if(boxMeshRef.current){
-            boxMeshRef.current.rotation.y += delta;
+            boxMeshRef.current.rotation.y += delta * 5;
         }
     })
     return (
