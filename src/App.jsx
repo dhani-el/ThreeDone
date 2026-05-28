@@ -1,10 +1,13 @@
-
+import { Canvas } from "@react-three/fiber";
+import FirstLesson from "./FirstRer3FLesson"
 
 function App() {
 
   return (
-    <div>
-      <p>This is my react three fiber playground</p>
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <Canvas>
+        <FirstLesson/>
+      </Canvas>
     </div>
   )
 }
